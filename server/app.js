@@ -6,6 +6,8 @@ const { validateApiKeyMiddleware } = require("./middleware/apiKeyMiddleware");
 require("dotenv").config();
 
 const app = express();
+
+const cors = require('cors');
 app.use(bodyParser.json());
 
 const corsOptions = {
