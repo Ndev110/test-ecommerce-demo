@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProducts, deleteProduct } from '../api';
 import {ProductForm} from './productForm';
+import { Button } from "flowbite-react";
 
 export const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -40,14 +41,14 @@ export const ProductList = () => {
 
   return (
     <div>
-      <h2> Products</h2>
+      <h2 className="text-3xl font-bold p-4"> Products</h2>
       <ProductForm product={selectedProduct} onSave={handleSave} />
       <ul>
         {products.map((product) => (
           <li key={product.id}>
             {product.name} - ${product.price} (Stock: {product.stock})
-            <button onClick={() => setSelectedProduct(product)}>Edit</button>
-            <button onClick={() => handleDelete(product.id)}>Delete</button>
+            <Button onClick={() => setSelectedProduct(product)}>Edit</Button>
+            <Button onClick={() => handleDelete(product.id)}>Delete</Button>
           </li>
         ))}
       </ul>

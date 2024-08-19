@@ -1,29 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { createProduct, updateProduct } from '../api';
+import { Button, TextInput } from "flowbite-react";
 
 export const ProductForm = ({ product, onSave }) => {
-  const [name, setName] = useState(product ? product.name : '');
-  const [price, setPrice] = useState(product ? product.price : '');
-  const [stock, setStock] = useState(product ? product.stock : '');
+  // Initialize state with an object
+  const [formState, setFormState] = useState({
+    name:  '',
+    price:  '',
+    stock:  ''
+  });
 
+  // Update form state when the product prop changes
   useEffect(() => {
     if (product) {
-      setName(product.name);
-      setPrice(product.price);
-      setStock(product.stock);
+      setFormState({
+        name: product.name,
+        price: product.price,
+        stock: product.stock
+      });
     }
   }, [product]);
 
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
-    console.log("i am in handle submit ")
     e.preventDefault();
-    const data = { name, price, stock };
+    console.log("Form State on Submit:", formState); // Check form state before submission
+    const { name, price, stock } = formState;
 
     try {
       if (product) {
-        await updateProduct(product.id, data);
+        await updateProduct(product.id, { name, price, stock });
       } else {
-        await createProduct(data);
+        await createProduct({ name, price, stock });
       }
       onSave();
     } catch (error) {
@@ -32,31 +48,43 @@ export const ProductForm = ({ product, onSave }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col space-y-4"
+    >
+      <TextInput
         type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        name="name"
+        value={formState.name} // Ensure a default empty string value
+        onChange={handleChange}
         placeholder="Product Name"
         required
       />
-      <input
+      <TextInput
         type="number"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        name="price"
+        value={formState.price} // Ensure a default empty string value
+        onChange={handleChange}
         placeholder="Price"
         required
+        min={1}
       />
-      <input
+      <TextInput
         type="number"
-        value={stock}
-        onChange={(e) => setStock(e.target.value)}
+        name="stock"
+        value={formState.stock || ''} // Ensure a default empty string value
+        onChange={handleChange}
         placeholder="Stock"
         required
+        min={1}
       />
-      <button type="submit">{product ? 'Update' : 'Add'} Product</button>
+
+      <Button
+        type="submit"
+        className="self-center mt-4 mb-2"
+      >
+        {product ? 'Update' : 'Add'} Product
+      </Button>
     </form>
   );
 };
-
-
