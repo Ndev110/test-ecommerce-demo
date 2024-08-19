@@ -1,13 +1,17 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define('Order', {
-    total: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    }
-  }, {});
-  Order.associate = function(models) {
-    Order.hasMany(models.OrderItem, { foreignKey: 'orderId' });
+  const order = sequelize.define(
+    "order",
+    {
+      total: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+      },
+    },
+    {}
+  );
+  order.associate = function (models) {
+    order.hasMany(models.orderItem, { foreignKey: "orderId" });
   };
-  return Order;
+  return order;
 };
