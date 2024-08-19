@@ -14,13 +14,13 @@ RUN npm install
 COPY . .
 
 # Set environment variables
-ENV PORT=3000
-ENV DATABASE_URL=postgres://dev@localhost:5432/ecommerce
-ENV DATABASE_NAME=ecommerce
-ENV DATABASE_USER=dev
-ENV DATABASE_PASSWORD=
-ENV DATABASE_PORT=5432
-ENV DATABASE_HOST=host.docker.internal
+# ENV PORT=3000
+# ENV DATABASE_URL=postgres://postgres@localhost:5432/ecommerce
+# ENV DATABASE_NAME=ecommerce
+# ENV DATABASE_USER=dev
+# ENV DATABASE_PASSWORD=
+# ENV DATABASE_PORT=5432
+# ENV DATABASE_HOST=host.docker.internal
 
 # Expose the port the app runs on
 EXPOSE 3000
