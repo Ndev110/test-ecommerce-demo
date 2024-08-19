@@ -1,5 +1,5 @@
 # Use the official Node.js image as a base image
-FROM node:14
+FROM node:18
 
 # Set the working directory in the container
 WORKDIR /app
@@ -20,7 +20,7 @@ ENV DATABASE_NAME=ecommerce
 ENV DATABASE_USER=dev
 ENV DATABASE_PASSWORD=
 ENV DATABASE_PORT=5432
-ENV DATABASE_HOST=localhost
+ENV DATABASE_HOST=host.docker.internal
 
 # Expose the port the app runs on
 EXPOSE 3000
