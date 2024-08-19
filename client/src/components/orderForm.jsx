@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createOrder, updateOrder } from '../api';
 import {ProductList} from './productList'; // To display products for selection
+import { Button, TextInput,Label,Select } from "flowbite-react";
 
  export const  OrderForm = ({ order, onSave }) => {
   const [items, setItems] = useState(order ? order.items : []);
@@ -34,27 +35,50 @@ import {ProductList} from './productList'; // To display products for selection
   return (
     <form onSubmit={handleSubmit}>
       {items.map((item, index) => (
-        <div key={index}>
-          <select
-            value={item.productId}
-            onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
-          >
-            {/* Populate options dynamically */}
-            <option value="">Select Product</option>
-            {/* Add product options here */}
-          </select>
-          <input
+        // <div key={index}>
+        //   <p>Select product</p>
+          
+        //   <select
+        //   placeholder="Select Product"
+        //     value={item.productId}
+        //     onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
+        //     className='m-2'
+        //   >
+       
+        //     <option value="">Select Product</option>
+         
+        //   </select>
+         
+        // </div>
+
+        <div className="max-w-md">
+        <div className="mb-2 block text-slate-100">
+          <Label className="text-slate-100" htmlFor="products" value="Select product" />
+        </div>
+        <Select id="products" required>
+          <option>water</option>
+          <option>glass</option>
+          <option>box</option>
+          <option>tissues</option>
+        </Select>
+        <p>Qunatity</p>
+          <TextInput
             type="number"
             value={item.quantity}
             onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
             placeholder="Quantity"
             min="1"
             required
+            className='m-2'
           />
-        </div>
+      </div>
+      
       ))}
-      <button type="button" onClick={handleAddItem}>Add Item</button>
-      <button type="submit">{order ? 'Update' : 'Create'} Order</button>
+     <div className="flex justify-center ">
+  <Button className='p-2 mt-4 mb-2 m-2' type="button" onClick={handleAddItem}>Add Item</Button>
+  <Button className='p-2 mt-4 mb-2 m-2' type="submit">{order ? 'Update' : 'Create'} Order</Button>
+</div>
+     
     </form>
   );
 };

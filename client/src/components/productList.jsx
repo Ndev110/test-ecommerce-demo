@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProducts, deleteProduct } from '../api';
 import {ProductForm} from './productForm';
-import { Button } from "flowbite-react";
+import { Button,Select,Lable } from "flowbite-react";
 
 export const ProductList = () => {
+
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+ 
   useEffect(() => {
     const loadProducts = async () => {
       try {
         const response = await fetchProducts();
         setProducts(response.data);
+       
+      
       } catch (error) {
         console.error('Failed to fetch products', error);
       }
@@ -19,7 +23,8 @@ export const ProductList = () => {
 
     loadProducts();
   }, []);
-
+ console.log("products")
+ 
   const handleSave = async () => {
     try {
       const response = await fetchProducts();
@@ -31,6 +36,7 @@ export const ProductList = () => {
   };
 
   const handleDelete = async (id) => {
+    setProducts(products.filter((product) => product.id !== id));
     try {
       await deleteProduct(id);
       setProducts(products.filter((product) => product.id !== id));
@@ -52,6 +58,7 @@ export const ProductList = () => {
           </li>
         ))}
       </ul>
+    
     </div>
   );
 };

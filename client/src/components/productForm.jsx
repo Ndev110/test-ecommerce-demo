@@ -3,14 +3,14 @@ import { createProduct, updateProduct } from '../api';
 import { Button, TextInput } from "flowbite-react";
 
 export const ProductForm = ({ product, onSave }) => {
-  // Initialize state with an object
+
   const [formState, setFormState] = useState({
     name:  '',
     price:  '',
     stock:  ''
   });
 
-  // Update form state when the product prop changes
+
   useEffect(() => {
     if (product) {
       setFormState({
@@ -21,7 +21,7 @@ export const ProductForm = ({ product, onSave }) => {
     }
   }, [product]);
 
-  // Handle input changes
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState(prevState => ({
@@ -32,7 +32,7 @@ export const ProductForm = ({ product, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form State on Submit:", formState); // Check form state before submission
+    console.log("Form State on Submit:", formState); 
     const { name, price, stock } = formState;
 
     try {
@@ -55,7 +55,7 @@ export const ProductForm = ({ product, onSave }) => {
       <TextInput
         type="text"
         name="name"
-        value={formState.name} // Ensure a default empty string value
+        value={formState.name} 
         onChange={handleChange}
         placeholder="Product Name"
         required
@@ -63,7 +63,7 @@ export const ProductForm = ({ product, onSave }) => {
       <TextInput
         type="number"
         name="price"
-        value={formState.price} // Ensure a default empty string value
+        value={formState.price} 
         onChange={handleChange}
         placeholder="Price"
         required
@@ -72,7 +72,7 @@ export const ProductForm = ({ product, onSave }) => {
       <TextInput
         type="number"
         name="stock"
-        value={formState.stock || ''} // Ensure a default empty string value
+        value={formState.stock || ''} 
         onChange={handleChange}
         placeholder="Stock"
         required
