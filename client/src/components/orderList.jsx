@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchOrders, deleteOrder } from '../api';
 import {OrderForm} from './orderForm';
 import { useNavigate } from 'react-router-dom';
-import { Button } from "flowbite-react";
+import { Button,ListGroup, ListGroupItem } from "flowbite-react";
 import '../App.css';
 export const OrderList = () => {
   const navigate = useNavigate();
@@ -47,15 +47,23 @@ export const OrderList = () => {
     <div className='App App-header'>
       <h2 className="text-3xl font-bold p-4">Orders</h2>
       <OrderForm order={selectedOrder} onSave={handleSave} />
-      <ul>
+      <div>
+      <h2 className="text-3xl font-bold p-4">Orders</h2>
+      <ListGroup>
         {orders.map((order) => (
-          <li key={order.id}>
-            Order ID: {order.id} - Total: ${order.total}
-            <button onClick={() => setSelectedOrder(order)}>Edit</button>
-            <button onClick={() => handleDelete(order.id)}>Delete</button>
-          </li>
+          <ListGroupItem key={order.id} className="flex justify-between items-center">
+            <div>
+              <span className="font-semibold">Order ID:</span> {order.id} - 
+              <span className="text-green-500">Total: ${order.total}</span>
+            </div>
+            <div className="flex space-x-2">
+              <Button size="xs" onClick={() => setSelectedOrder(order)}>Edit</Button>
+              <Button size="xs" color="failure" onClick={() => handleDelete(order.id)}>Delete</Button>
+            </div>
+          </ListGroupItem>
         ))}
-      </ul>
+      </ListGroup>
+    </div>
       <Button className="self-center mt-4 mb-2" onClick={goBack}>Back to Products Page</Button>
     </div>
   );

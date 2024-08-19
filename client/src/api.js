@@ -1,5 +1,6 @@
 
-import {API} from '../src/service/apiService'
+import {API} from './utils /constants';
+import {api} from './service/apiService'
 
 
 

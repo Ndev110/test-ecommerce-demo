@@ -2,10 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { createOrder, updateOrder } from '../api';
 import {ProductList} from './productList'; // To display products for selection
 import { Button, TextInput,Label,Select } from "flowbite-react";
+import { fetchProducts } from '../api';
 
- export const  OrderForm = ({ order, onSave }) => {
+ export const  OrderForm = ({ order, onSave  }) => {
   const [items, setItems] = useState(order ? order.items : []);
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const response = await fetchProducts();
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Failed to fetch products', error);
+      }
+    };
+
+    loadProducts();
+  }, []);
   const handleAddItem = () => {
     setItems([...items, { productId: '', quantity: 1 }]);
   };
@@ -35,32 +49,25 @@ import { Button, TextInput,Label,Select } from "flowbite-react";
   return (
     <form onSubmit={handleSubmit}>
       {items.map((item, index) => (
-        // <div key={index}>
-        //   <p>Select product</p>
-          
-        //   <select
-        //   placeholder="Select Product"
-        //     value={item.productId}
-        //     onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
-        //     className='m-2'
-        //   >
-       
-        //     <option value="">Select Product</option>
-         
-        //   </select>
-         
-        // </div>
+      
 
         <div className="max-w-md">
         <div className="mb-2 block text-slate-100">
           <Label className="text-slate-100" htmlFor="products" value="Select product" />
         </div>
-        <Select id="products" required>
-          <option>water</option>
-          <option>glass</option>
-          <option>box</option>
-          <option>tissues</option>
-        </Select>
+        <Select
+            id="products"
+            required
+            value={item.productId}
+            onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
+          >
+            <option value="item.productId">Select Product</option>
+            {products.map(product => (
+              <option key={product.id} value={product.id}>
+                {product.name}
+              </option>
+            ))}
+          </Select>
         <p>Qunatity</p>
           <TextInput
             type="number"
