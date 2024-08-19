@@ -24,7 +24,7 @@ const updateProduct = async (req, res) => {
       where: { id: id },
     });
     if (updated) {
-      const updatedProduct = await product.findOne({ where: { id: id } });
+      const updatedProduct = await sequelize.models.Product.findOne({ where: { id: id } });
       return res.status(200).json(updatedProduct);
     }
     throw new Error("Product not found");
