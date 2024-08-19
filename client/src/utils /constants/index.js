@@ -1,5 +1,7 @@
 // product constants 
-export const PRODUCTS = '/products'
 
-//orders constants 
-export const ORDERS = '/orders'
+
+export const API = {
+    products: "/products",
+    orders: "/orders",
+}
