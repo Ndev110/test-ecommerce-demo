@@ -1,13 +1,7 @@
-import axios from 'axios';
 
-const API_URL = 'http://localhost:3000'; 
+import {api} from '../src/service/apiService'
 
-export const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+
 
 export const fetchProducts = () => api.get('/products');
 export const createProduct = (product) => api.post('/products', product);
