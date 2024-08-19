@@ -31,4 +31,4 @@ const PORT = process.env.PORT || 3000;
   }
 })();
 
-app.use("/api", validateApiKeyMiddleware, router);
+app.use("/api", router);

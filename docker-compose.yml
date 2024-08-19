@@ -1,0 +1,39 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://dev@localhost:5432/ecommerce
+      - DATABASE_NAME=ecommerce
+      - DATABASE_USER=dev
+      - DATABASE_PASSWORD=
+      - DATABASE_PORT=5432
+      - DATABASE_HOST=localhost
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD:
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

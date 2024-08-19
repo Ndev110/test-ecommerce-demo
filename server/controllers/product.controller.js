@@ -1,8 +1,17 @@
-const { product } = require("../models");
+const {
+  db: {
+    sequelize
+  },
+} = require("../models");
 
 const createProduct = async (req, res) => {
   try {
-    const newProduct = await product.create(req.body);
+    const { name, price, stock } = req.body;
+    const newProduct = await sequelize.models.Product.create({
+      name,
+      price,
+      stock,
+    });
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -11,7 +20,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await product.update(req.body, {
+    const [updated] = await sequelize.models.Product.update(req.body, {
       where: { id: id },
     });
     if (updated) {
@@ -26,7 +35,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await product.destroy({
+    const deleted = await sequelize.models.Product.destroy({
       where: { id: id },
     });
     if (deleted) {
@@ -38,4 +47,13 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = {createProduct, updateProduct, deleteProduct};
+const getProducts = async (req, res) => {
+  try {
+    const products = await sequelize.models.Product.findAll();
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+module.exports = { createProduct, updateProduct, deleteProduct, getProducts };

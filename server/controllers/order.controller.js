@@ -1,23 +1,28 @@
-const { order, product, orderItem } = require("../models");
+const {
+  db: { sequelize },
+} = require("../models");
 
 const createOrder = async (req, res) => {
   const { items } = req.body;
 
   const transaction = await sequelize.transaction();
   try {
-    const newOrder = await order.create({ total: 0 }, { transaction });
+    const newOrder = await sequelize.models.Order.create({ total: 0 }, { transaction });
     let total = 0;
 
     for (let item of items) {
-      const orderProduct = await product.findByPk(item.productId, {
-        transaction,
-      });
-      if (!product) throw new Error(`product ID ${item.productId} not found`);
+      const orderProduct = await sequelize.models.Product.findByPk(
+        item.productId,
+        {
+          transaction,
+        }
+      );
+      if (!orderProduct) throw new Error(`product ID ${item.productId} not found`);
 
-      const amount = product.price * item.quantity;
+      const amount = orderProduct.price * item.quantity;
       total += amount;
 
-      await orderItem.create(
+      await sequelize.models.OrderProduct.create(
         {
           orderId: newOrder.id,
           productId: orderProduct.id,
@@ -27,35 +32,38 @@ const createOrder = async (req, res) => {
       );
     }
 
-    await order.update({ total }, { transaction });
+    await sequelize.models.Order.update({ total }, {  where: { id: newOrder.id }, transaction });
     await transaction.commit();
 
-    res.json(order);
+    res.json(newOrder);
   } catch (error) {
+    console.log("-----------------_>",{error}); 
     await transaction.rollback();
     res.status(400).json({ error: error.message });
   }
 };
 
- const updateOrder = async (req, res) => {
+const updateOrder = async (req, res) => {
   const { items } = req.body;
 
   const transaction = await sequelize.transaction();
   try {
-    const order = await order.findByPk(req.params.id, { transaction });
+    const order = await sequelize.models.Order.findByPk(req.params.id, {
+      transaction,
+    });
     if (!order) return res.sendStatus(404);
-    await orderItem.destroy({ where: { orderId: order.id }, transaction });
+    await  sequelize.models.OrderProduct.destroy({ where: { orderId: order.id }, transaction });
 
     let total = 0;
 
     for (let item of items) {
-      const product = await product.findByPk(item.productId, { transaction });
+      const product = await sequelize.models.Product.findByPk(item.productId, { transaction });
       if (!product) throw new Error(`product ID ${item.productId} not found`);
 
       const amount = product.price * item.quantity;
       total += amount;
 
-      await orderItem.create(
+      await sequelize.models.OrderProduct.create(
         {
           orderId: order.id,
           productId: product.id,
@@ -65,7 +73,7 @@ const createOrder = async (req, res) => {
       );
     }
 
-    await order.update({ total }, { transaction });
+    await sequelize.models.Order.update({ total }, { transaction });
     await transaction.commit();
 
     res.json(order);
@@ -77,12 +85,14 @@ const createOrder = async (req, res) => {
 
 const getOrders = async (req, res) => {
   try {
-    const orders = await order.findAll({
+    const orders = await sequelize.models.Order.findAll({
       include: [
         {
-          model: orderItem,
-          as: "items",
-          include: [{ model: product, as: "product" }],
+          model: sequelize.models.Product,
+          through: {
+            model: sequelize.models.OrderProduct,
+            attributes: ["quantity"],
+          }
         },
       ],
     });
@@ -91,4 +101,4 @@ const getOrders = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-module.exports = {createOrder, updateOrder, getOrders};
+module.exports = { createOrder, updateOrder, getOrders };

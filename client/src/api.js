@@ -1,12 +1,10 @@
-
-import {API} from './utils /constants';
-import {api} from './service/apiService'
-
-
+import { API } from "./utils /constants/index";
+import { api } from "./service/apiService";
 
 export const fetchProducts = () => api.get(API.products);
 export const createProduct = (product) => api.post(API.products, product);
-export const updateProduct = (id, product) => api.put(`${API.products}/${id}`, product);
+export const updateProduct = (id, product) =>
+  api.put(`${API.products}/${id}`, product);
 export const deleteProduct = (id) => api.delete(`${API.products}/${id}`);
 
 export const fetchOrders = () => api.get(API.orders);

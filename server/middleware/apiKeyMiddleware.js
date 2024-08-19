@@ -1,3 +1,4 @@
+require('dotenv').config();
 const validateApiKeyMiddleware = function (req, res, next) {
 const jwt = require('jsonwebtoken');    
   var apiKey = req.headers['x-api-key'];

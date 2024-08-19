@@ -2,6 +2,6 @@
 
 
 export const API = {
-    products: "/products",
-    orders: "/orders",
+    products: "/api/products",
+    orders: "/api/orders",
 }
